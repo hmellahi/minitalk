@@ -1,6 +1,6 @@
 #include "minitalk.h"
 
-char binary_to_asc(t_string binary)
+char	binary_to_asc(t_string binary)
 {
 	char	rec;
 	int		i;
@@ -9,14 +9,16 @@ char binary_to_asc(t_string binary)
 	rec = 0;
 	while (++i < 8)
 		rec = (rec << 1) + (binary[i] != '0');
- 	return (rec);
+	return (rec);
 }
 
-
-int i;
-t_string binary;
-void    handle_signal(int signal)
+void	handle_signal(int signal)
 {
+	static int		i;
+	static t_string	binary;
+
+	if (binary == NULL)
+		binary = ft_strdup("");
 	i++;
 	if (signal == SIGUSR1)
 		binary = str_join(binary, '1');
@@ -25,29 +27,22 @@ void    handle_signal(int signal)
 	if (i == 8)
 	{
 		i = 0;
-		char c = binary_to_asc(binary);
-		binary = "";
-		ft_putchar_fd(c, 1);
+		ft_putchar_fd(binary_to_asc(binary), 1);
+		free(binary);
+		binary = ft_strdup("");
 	}
-	x();
-	// signal(SIGUSR1, handle_signal);
-	// signal(SIGUSR2, handle_signal);
 }
 
-int main()
+int	main(void)
 {
-	pid_t pid;
+	t_string	pid_str;
 
-	i = 0;
-	binary = "";
-	pid = getpid();
+	pid_str = ft_itoa(getpid());
 	ft_putstr_fd("SERVER PID: ", 1);
-	ft_putstr_fd(ft_itoa(pid), 1);
+	ft_putstr_fd(pid_str, 1);
 	ft_putstr_fd("\n", 1);
 	signal(SIGUSR1, handle_signal);
 	signal(SIGUSR2, handle_signal);
-	while(1)
-	{
+	while (1)
 		pause();
-	}
 }

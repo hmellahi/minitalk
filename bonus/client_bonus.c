@@ -1,4 +1,4 @@
-#include "minitalk.h"
+#include "../minitalk.h"
 #include <unistd.h>
 
 t_string	ascToBinary(int c)
@@ -29,7 +29,8 @@ char	*convert_str_to_binary(char *str)
 	binary = ft_strdup("");
 	while (*str)
 	{
-		binary = ft_strjoin(binary, ascToBinary(*str), "11");
+		b = ascToBinary(*str);
+		binary = ft_strjoin(binary, b, "11");
 		str++;
 	}
 	return (binary);
@@ -53,6 +54,7 @@ void	send_signals(char *binary_str, pid_t server_pid)
 int	main(int ac, char **av)
 {
 	int			server_pid;
+	t_string	client_pid;
 	t_string	msg;
 	t_string	encoded_msg;
 
@@ -68,7 +70,11 @@ int	main(int ac, char **av)
 			"PID must be positive", 2);
 		exit(1);
 	}
-	msg = av[2];
+	client_pid = ft_itoa(getpid());
+	msg = ft_strjoin("client[", client_pid, "01");
+	msg = ft_strjoin(msg, "] > ", "10");
+	msg = ft_strjoin(msg, av[2], "10");
+	msg = ft_strjoin(msg, "\n", "10");
 	encoded_msg = convert_str_to_binary(msg);
 	send_signals(encoded_msg, server_pid);
 	free(encoded_msg);
