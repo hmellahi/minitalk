@@ -1,6 +1,5 @@
 #ifndef MINITALK_H
 # define MINITALK_H
-# include <stdio.h>
 # include <signal.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -14,4 +13,5 @@ void	ft_putstr_fd(char const *str, int fd);
 void	ft_putchar_fd(char c, int fd);
 char	*ft_strjoin(char *s1, char *s2, t_string index);
 char	*ft_strdup(char *src);
-#endif MINITALK_H
+
+#endif

@@ -1,20 +1,25 @@
-client = client
-server = server
-client_bonus = client_bonus
+client_name = client
+server_name = server
+bonus_client_name = client_bonus
 NAME=fsd
-all: ${NAME}
+all: ${client_name} ${server_name}
 
-${NAME} :
+${client_name}:
 	gcc client.c utils.c utils2.c -o client
+
+${server_name}:
 	gcc server.c utils.c utils2.c -o server
 
-bonus:
+bonus: ${server_name} ${bonus_client_name}
+
+${bonus_client_name}:
 	gcc bonus/client_bonus.c utils.c utils2.c -o client_bonus
-	gcc server.c utils.c utils2.c -o server
 
 clean:
 
 fclean: clean
-	rm -rf ${client} ${server} ${client_bonus}
+	rm -rf ${client_name} ${server_name} ${bonus_client_name}
+
+re: fclean all
 
 .PHONY: all bonus clean ${NAME}
